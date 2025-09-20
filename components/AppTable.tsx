@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import ProductTable from "./Products/ProductTable";
 
 const AppTable = () => {
   return (
@@ -12,7 +13,9 @@ const AppTable = () => {
         </div>
         <Button className="text-white">Add Products</Button>
       </CardHeader>
-      <CardContent>{/* Add table or product list content here */}</CardContent>
+      <CardContent>
+        <ProductTable />
+      </CardContent>
     </Card>
   );
 };
