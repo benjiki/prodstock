@@ -1,18 +1,25 @@
 "use client";
-import { Status } from "@/types";
-import { statuses } from "@/utils/Status";
+import { categories } from "@/utils/Category";
 import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { BrushCleaning, LucideGitPullRequestDraft } from "lucide-react";
-import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 import { Checkbox } from "../ui/checkbox";
 import { Separator } from "../ui/separator";
-const StatusDropDown = () => {
+
+const CategoryDropDown = () => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "s" && (e.metaKey || e.altKey)) {
+      if (e.key.toLowerCase() === "c" && (e.metaKey || e.altKey)) {
         e.preventDefault();
         setOpen(true); // set to true directly instead of toggling
       }
@@ -23,8 +30,8 @@ const StatusDropDown = () => {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  function returnColor(status: string) {
-    switch (status) {
+  function returnColor(category: string) {
+    switch (category) {
       case "published":
         return "text-green-600 bg-green-100";
       case "inactive":
@@ -41,7 +48,7 @@ const StatusDropDown = () => {
         <PopoverTrigger asChild>
           <Button variant={"secondary"} className="h-10">
             <LucideGitPullRequestDraft />
-            Status
+            Categories
           </Button>
         </PopoverTrigger>
         <PopoverContent
@@ -50,22 +57,25 @@ const StatusDropDown = () => {
           align="center"
         >
           <Command className="p-1">
+            <CommandInput placeholder="Category" />
             <CommandList>
+              <CommandEmpty className="text-slate-500 text-sm text-center p-5">
+                No Category Found
+              </CommandEmpty>
               <CommandGroup>
-                {statuses.map((status) => (
+                {categories.map((category) => (
                   <CommandItem
                     className="h-10 mb-2"
-                    key={status.value}
-                    value={status.value}
+                    key={category.value}
+                    value={category.value}
                   >
                     <Checkbox className="checkbox" />
                     <div
                       className={`flex items-center gap-1 ${returnColor(
-                        status.value
+                        category.value
                       )} p-1 rounded-lg px-4 text-[13px]`}
                     >
-                      {status.icons}
-                      {status.label}
+                      {category.label}
                     </div>
                   </CommandItem>
                 ))}
@@ -84,4 +94,4 @@ const StatusDropDown = () => {
   );
 };
 
-export default StatusDropDown;
+export default CategoryDropDown;
