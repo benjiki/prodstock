@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import ProductTable from "./Products/ProductTable";
+import { products } from "@/utils/productData";
+import { columns } from "./Products/columuns";
 
 const AppTable = () => {
   return (
@@ -14,7 +16,7 @@ const AppTable = () => {
         <Button className="text-white">Add Products</Button>
       </CardHeader>
       <CardContent>
-        <ProductTable />
+        <ProductTable data={products} columns={columns} />
       </CardContent>
     </Card>
   );
