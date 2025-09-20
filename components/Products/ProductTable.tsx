@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { CircleX } from "lucide-react";
+import StatusDropDown from "../DropDowns/StatusDropDown";
 
 function FilterArea() {
   return (
@@ -43,7 +44,7 @@ const ProductTable = () => {
             className="max-w-sm h-10"
           />
           <div className="flex items-center gap-4">
-            <Button variant={"secondary"}>Status</Button>
+            <StatusDropDown />
             <Button variant={"secondary"}>Category</Button>
           </div>
         </div>

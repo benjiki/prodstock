@@ -113,6 +113,23 @@
   --sidebar-ring: oklch(0.488 0.243 264.376);
 }
 
+.checkbox {
+  @apply h-5 w-5 rounded-md border border-gray-300 bg-gray-100 text-white;
+}
+
+.checkbox[data-state='checked'] {
+  @apply bg-gray-700 text-white;
+}
+
+/* Dark mode */
+.dark .checkbox {
+  @apply bg-gray-800 text-gray-100 border-gray-600;
+}
+
+.dark .checkbox[data-state='checked'] {
+  @apply bg-white text-gray-900;
+}
+
 
 @layer base {
   * {
