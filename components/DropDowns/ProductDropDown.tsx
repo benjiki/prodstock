@@ -8,12 +8,21 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { CopyCheck, Edit, LucideDelete, MoreHorizontal } from "lucide-react";
 import { Row } from "@tanstack/react-table";
 import { Product } from "@/types";
 
 const ProductDropDown = ({ row }: { row: Row<Product> }) => {
-  const payment = row.original;
+  const menuItem = [
+    { icon: <CopyCheck />, label: "Copy", className: "" },
+    { icon: <Edit />, label: "Edit", className: "" },
+    { separator: true },
+    {
+      icon: <LucideDelete className="text-lg" />,
+      label: "Delete",
+      className: "text-red-600",
+    },
+  ];
 
   return (
     <DropdownMenu>
@@ -23,16 +32,23 @@ const ProductDropDown = ({ row }: { row: Row<Product> }) => {
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+
+      <DropdownMenuContent align="end" className="font-poppins">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(payment.id)}
-        >
-          Copy payment ID
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>View customer</DropdownMenuItem>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+
+        {menuItem.map((item, index) =>
+          item.separator ? (
+            <DropdownMenuSeparator key={index} />
+          ) : (
+            <DropdownMenuItem
+              key={index}
+              className={`flex items-center gap-1 p-[10px] ${item.className}`}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </DropdownMenuItem>
+          )
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
