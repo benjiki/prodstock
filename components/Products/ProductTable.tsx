@@ -1,10 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { CircleX } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  CircleX,
+} from "lucide-react";
 import StatusDropDown from "../DropDowns/StatusDropDown";
 import CategoryDropDown from "../DropDowns/CategoryDropDown";
 
@@ -12,6 +18,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -23,6 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PaginationType } from "@/types";
+import PaginationSelection from "./PaginationSelection";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,10 +70,20 @@ const ProductTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
+  const [pagination, setPagination] = useState<PaginationType>({
+    pageIndex: 0,
+    pageSize: 8,
+  });
+
   const table = useReactTable({
     data,
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
   return (
     <div className="">
@@ -132,6 +151,62 @@ const ProductTable = <TData, TValue>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-between mt-5">
+        <PaginationSelection
+          pagination={pagination}
+          setPagination={setPagination}
+        />
+        <div className="flex gap-6 items-center">
+          <span className="text-sm text-gray-500">
+            Page {pagination.pageIndex + 1} of{table.getPageCount()}
+          </span>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            {/* Firts Page Button */}
+            <Button
+              variant={"outline"}
+              className="size-9 w-12"
+              size={"sm"}
+              onClick={() => table.firstPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeft />
+            </Button>
+
+            {/* Previous Page Button */}
+            <Button
+              variant={"outline"}
+              className="size-9 w-12"
+              size={"sm"}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft />
+            </Button>
+
+            {/* next page button */}
+            <Button
+              variant={"outline"}
+              className="size-9 w-12"
+              size={"sm"}
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRight />
+            </Button>
+
+            {/* last page button  */}
+            <Button
+              variant={"outline"}
+              className="size-9 w-12"
+              size={"sm"}
+              onClick={() => table.lastPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRight />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

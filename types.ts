@@ -34,3 +34,15 @@ export type Product ={
     price:number;
     icon:LucideIcon;
 }
+export type PaginationType ={
+    pageIndex: number
+    pageSize: number
+}
+
+export type PaginationTableState = {
+  pagination: PaginationType
+}
+
+export type PaginationInitialTableState = {
+  pagination?: Partial<PaginationType>
+}
