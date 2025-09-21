@@ -1,13 +1,54 @@
 import { Product } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check } from "lucide-react";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpDown,
+  ArrowUpWideNarrow,
+  Check,
+} from "lucide-react";
 import { ReactNode } from "react";
 import ProductDropDown from "../DropDowns/ProductDropDown";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const SortingIcon =
+        isSorted === "asc"
+          ? ArrowDownWideNarrow
+          : isSorted === "desc"
+          ? ArrowUpWideNarrow
+          : ArrowUpDown;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} aria-label="Sort by Name">
+              Name
+              <SortingIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" side="bottom">
+            <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+              <ArrowUpWideNarrow />
+              Asc
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+              <ArrowUpWideNarrow />
+              Desc
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
     cell: ({ row }) => {
       const Icon = row.original.icon;
       const name = row.original.name;

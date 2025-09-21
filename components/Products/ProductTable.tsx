@@ -16,9 +16,11 @@ import CategoryDropDown from "../DropDowns/CategoryDropDown";
 
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -74,16 +76,20 @@ const ProductTable = <TData, TValue>({
     pageIndex: 0,
     pageSize: 8,
   });
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
     state: {
       pagination,
+      sorting,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
   return (
     <div className="">
