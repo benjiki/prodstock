@@ -1,3 +1,4 @@
+import { Column } from "@tanstack/react-table";
 import { LucideIcon } from "lucide-react";
 
 
@@ -45,4 +46,9 @@ export type PaginationTableState = {
 
 export type PaginationInitialTableState = {
   pagination?: Partial<PaginationType>
+}
+
+export type SortableHeaderProps={
+  column:Column<any,unknown>;
+  label:string;
 }

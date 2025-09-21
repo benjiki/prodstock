@@ -1,4 +1,4 @@
-import { Product } from "@/types";
+import { Product, SortableHeaderProps } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowDownWideNarrow,
@@ -16,38 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+// Define columns with sorting logic in headers
 export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      const SortingIcon =
-        isSorted === "asc"
-          ? ArrowDownWideNarrow
-          : isSorted === "desc"
-          ? ArrowUpWideNarrow
-          : ArrowUpDown;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} aria-label="Sort by Name">
-              Name
-              <SortingIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" side="bottom">
-            <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-              <ArrowUpWideNarrow />
-              Asc
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-              <ArrowUpWideNarrow />
-              Desc
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <SorttableHeader column={column} label="Name" />; // Fixed return statement here
     },
     cell: ({ row }) => {
       const Icon = row.original.icon;
@@ -64,20 +38,28 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "sku",
-    header: "Sku",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="Sku" />;
+    },
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="Price" />;
+    },
     cell: ({ getValue }) => `$${getValue<number>().toFixed(2)}`,
   },
   {
     accessorKey: "category",
-    header: "Category",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="Category" />;
+    },
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="Status" />;
+    },
     cell: ({ row }) => {
       const status = row.original.status;
       let colorClass;
@@ -110,16 +92,56 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "quantityInStock",
-    header: "QuantityInStock",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="QunatityInStock" />;
+    },
   },
   {
     accessorKey: "supplier",
-    header: "Supplier",
+    header: ({ column }) => {
+      return <SorttableHeader column={column} label="Supplier" />;
+    },
   },
   {
-    id: "actions",
+    id: "Actions",
     cell: ({ row }) => {
       return <ProductDropDown row={row} />;
     },
   },
 ];
+
+// Sortable Header Component
+const SorttableHeader: React.FC<SortableHeaderProps> = ({ column, label }) => {
+  const isSorted = column.getIsSorted();
+  const SortingIcon =
+    isSorted === "asc"
+      ? ArrowDownWideNarrow
+      : isSorted === "desc"
+      ? ArrowUpWideNarrow
+      : ArrowUpDown;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          aria-label={`Sort by ${label}`}
+          className="flex items-center gap-2"
+        >
+          {label}
+          <SortingIcon className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" side="bottom">
+        <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+          <ArrowUpWideNarrow className="mr-2 h-4 w-4" />
+          Asc
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+          <ArrowDownWideNarrow className="mr-2 h-4 w-4" />
+          Desc
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
