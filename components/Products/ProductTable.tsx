@@ -16,9 +16,11 @@ import CategoryDropDown from "../DropDowns/CategoryDropDown";
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -77,19 +79,24 @@ const ProductTable = <TData, TValue>({
     pageSize: 8,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const table = useReactTable({
     data,
     columns,
-    state: {
-      pagination,
-      sorting,
-    },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      pagination,
+      sorting,
+      columnFilters,
+    },
   });
   return (
     <div className="">
@@ -97,6 +104,10 @@ const ProductTable = <TData, TValue>({
         <div className="flex items-center justify-between">
           <Input
             placeholder="Search Product Name here"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
             className="max-w-sm h-10"
           />
           <div className="flex items-center gap-4">
